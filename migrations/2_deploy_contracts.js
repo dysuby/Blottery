@@ -1,5 +1,5 @@
-let MarkTwo = artifacts.require('MarkTwo');
+let Manager = artifacts.require('Manager');
 
 module.exports = function (deployer) {
-  deployer.deploy(MarkTwo);
+  deployer.deploy(Manager);
 };
