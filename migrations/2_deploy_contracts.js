@@ -1,4 +1,4 @@
-let Manager = artifacts.require('Manager');
+const Manager = artifacts.require('Manager');
 
 module.exports = function (deployer) {
   deployer.deploy(Manager);
