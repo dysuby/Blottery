@@ -1,0 +1,31 @@
+body {
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 5%;
+  font-family: sans-serif;
+}
+
+.nav-title {
+  font-family: Sofia;
+}
+
+.font-Alice {
+  font-family: Alice;
+}
+
+.row {
+  padding: 10px;
+}
+
+.table-head {
+  font-size: 2em;
+  font-family: "Lucida Console", Monaco, monospace;
+}
+
+.text-vc {
+  margin: 1% 0;
+}
+
+.font-Caudex {
+  font-family: Caudex;
+}
