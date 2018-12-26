@@ -2,7 +2,10 @@
 <html>
   <head>
     <title>Blottery - a blockchain-based lottery game</title>
-    <link href='https://fonts.googleapis.com/css?family=Sofia|Alice|Caudex' rel='stylesheet'>
+    <link
+      href="https://fonts.googleapis.com/css?family=Sofia|Alice|Caudex"
+      rel="stylesheet"
+    />
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link
       rel="stylesheet"
@@ -11,6 +14,7 @@
       crossorigin="anonymous"
     />
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
       integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
@@ -26,18 +30,33 @@
         <div class="navbar-header">
           <a class="navbar-brand nav-title">Blottery</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+        <div id="unlogined">
           <form class="navbar-form navbar-right">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="address" />
               <input
+                name="address"
+                type="text"
+                class="form-control"
+                placeholder="address"
+              />
+              <input
+                name="password"
                 type="password"
                 class="form-control"
                 placeholder="password"
               />
+              <button class="btn btn-primary" id="login-btn">login</button>
             </div>
-            <button type="submit" class="btn btn-primary">login</button>
           </form>
+        </div>
+        <div class="navbar-right" id="logined">
+          <button
+            class="btn btn-primary navbar-btn"
+            title="sponsor a lottery game"
+          >
+            sponsor
+          </button>
+          <button class="btn navbar-btn" title="logout">logout</button>
         </div>
         <!--/.nav-collapse -->
       </div>
@@ -49,51 +68,43 @@
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 table-head">
           Address
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 table-head">
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 table-head">Due</div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 table-head">
           Pool(ether)
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 table-head">
-          Action
-        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 table-head">Action</div>
       </div>
       <div class="row">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-vc">
           0x9a7b8ABc59859142396B926EE1Bc706092915723
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-vc">
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-vc">2008</div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-vc">
           0x12345172727272742489104
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
           <buttun class="btn btn-success">Buy</buttun>
           <buttun class="btn btn-primary">Award</buttun>
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-vc">
-          0x12345
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-vc">
-          0x12345
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-vc">0x12345</div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-vc">2008</div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-vc">0x12345</div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
           <buttun class="btn btn-success">Buy</buttun>
           <buttun class="btn btn-primary">Award</buttun>
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-vc">
-          0x12345
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-vc">
-          0x12345
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-vc">0x12345</div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-vc">2008</div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-vc">0x12345</div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
           <buttun class="btn btn-success">Buy</buttun>
           <buttun class="btn btn-primary">Award</buttun>
         </div>
       </div>
     </div>
-
-
   </body>
 </html>
