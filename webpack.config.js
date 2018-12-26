@@ -10,24 +10,39 @@ module.exports = {
   },
   plugins: [
     // Copy our app's index.html to the build folder.
-    new CopyWebpackPlugin([
-      { from: './app/index.html', to: 'index.html' }
-    ])
+    new CopyWebpackPlugin([{ from: './app/index.html', to: 'index.html' }])
   ],
   devtool: 'source-map',
   module: {
     rules: [
-      { test: /\.s?css$/, use: [ 'style-loader', 'css-loader', 'sass-loader' ] },
+      {
+        test: /\.(css|less|scss)$/,
+        use: ['style-loader', 'css-loader', 'sass-loader', 'less-loader']
+      },
+      {
+        test: require.resolve('jquery'),
+        use: [{
+          loader: 'expose-loader',
+          options: 'jQuery'
+        }, {
+          loader: 'expose-loader',
+          options: '$'
+        }]
+      },
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         query: {
           presets: ['env'],
-          plugins: ['transform-react-jsx', 'transform-object-rest-spread', 'transform-runtime']
+          plugins: [
+            'transform-react-jsx',
+            'transform-object-rest-spread',
+            'transform-runtime'
+          ]
         }
       }
     ]
   }
-}
+};
 
