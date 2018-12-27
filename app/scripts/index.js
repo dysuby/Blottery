@@ -1,102 +1,78 @@
-// Import the page's CSS. Webpack will know what to do with it.
-import '../styles/app.css'
+import '../styles/style.css';
+import '../../node_modules/toastr/build/toastr.css';
 
-// Import libraries we need.
-import { default as Web3 } from 'web3'
-import { default as contract } from 'truffle-contract'
+import { default as Web3 } from 'web3';
+import { default as contract } from 'truffle-contract';
+import $ from 'jquery';
+import * as toastr from 'toastr';
 
-// Import our contract artifacts and turn them into usable abstractions.
-import metaCoinArtifact from '../../build/contracts/MetaCoin.json'
+import ManagerArtifact from '../../build/contracts/Manager.json';
+import MaskTwoArtifact from '../../build/contracts/MarkTwo.json';
 
-// MetaCoin is our usable abstraction, which we'll use through the code below.
-const MetaCoin = contract(metaCoinArtifact)
+const Manager = contract(ManagerArtifact);
+const MaskTwo = contract(MaskTwoArtifact);
 
-// The following code is simple to show off interacting with your contracts.
-// As your needs grow you will likely need to change its form and structure.
-// For application bootstrapping, check out window.addEventListener below.
-let accounts
-let account
+let account = '';
+let password = '';
+let managerInstance;
 
-const App = {
-  start: function () {
-    const self = this
-
-    // Bootstrap the MetaCoin abstraction for Use.
-    MetaCoin.setProvider(web3.currentProvider)
-
-    // Get the initial account balance so it can be displayed.
-    web3.eth.getAccounts(function (err, accs) {
-      if (err != null) {
-        alert('There was an error fetching your accounts.')
-        return
-      }
-
-      if (accs.length === 0) {
-        alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.")
-        return
-      }
-
-      accounts = accs
-      account = accounts[0]
-
-      self.refreshBalance()
-    })
-  },
-
-  setStatus: function (message) {
-    const status = document.getElementById('status')
-    status.innerHTML = message
-  },
-
-  refreshBalance: function () {
-    const self = this
-
-    let meta
-    MetaCoin.deployed().then(function (instance) {
-      meta = instance
-      return meta.getBalance.call(account, { from: account })
-    }).then(function (value) {
-      const balanceElement = document.getElementById('balance')
-      balanceElement.innerHTML = value.valueOf()
-    }).catch(function (e) {
-      console.log(e)
-      self.setStatus('Error getting balance; see log.')
-    })
-  },
-
-  sendCoin: function () {
-    const self = this
-
-    const amount = parseInt(document.getElementById('amount').value)
-    const receiver = document.getElementById('receiver').value
-
-    this.setStatus('Initiating transaction... (please wait)')
-
-    let meta
-    MetaCoin.deployed().then(function (instance) {
-      meta = instance
-      return meta.sendCoin(receiver, amount, { from: account })
-    }).then(function () {
-      self.setStatus('Transaction complete!')
-      self.refreshBalance()
-    }).catch(function (e) {
-      console.log(e)
-      self.setStatus('Error sending coin; see log.')
-    })
+function setStatus(state) {
+  if (state === 'logined') {
+    $('#unlogined').hide();
+    $('#logined').show();
+    $('input[name="address"]').val('');
+    $('input[name="password"]').val('');
+    $('.lottery-action-btn').removeClass('disabled');
+  } else if (state === 'unlogined') {
+    $('#logined').hide();
+    $('#unlogined').show();
+    $('.lottery-action-btn').addClass('disabled');
   }
 }
 
-window.App = App
+async function login() {
+  let address = $('input[name="address"]')[0].value;
+  let pwd = $('input[name="password"]')[0].value;
+  try {
+    await web3.personal.unlockAccount(address, pwd, 0);
+    account = address;
+    password = pwd;
+    toastr.success('Login success');
+    setStatus('logined');
+  } catch (err) {
+    console.log(err.message);
+    toastr.error(err.message);
+  }
+  return false;
+}
 
-window.addEventListener('load', function () {
-  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+async function logout(message) {
+  await web3.personal.lockAccount(account, password, 0);
+  account = '';
+  password = '';
+  toastr.success('Log out');
+  setStatus('unlogined');
+}
+
+function configToastr() {
+  toastr.options.closeButton = true;
+}
+
+window.addEventListener('load', async function() {
   if (typeof web3 !== 'undefined') {
-    // Use Mist/MetaMask's provider
     window.web3 = new Web3(web3.currentProvider);
   } else {
-    // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-    window.web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:9545'));
+    window.web3 = new Web3(
+      new Web3.providers.HttpProvider('http://127.0.0.1:9545')
+    );
   }
+  Manager.setProvider(web3.currentProvider);
 
-  App.start();
-})
+  configToastr();
+  $('#login-btn').click(login);
+  $('#logout-btn').click(logout);
+
+  Manager.deployed().then(instance => {
+    managerInstance = instance;
+  });
+});
