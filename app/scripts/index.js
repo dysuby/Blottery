@@ -3,7 +3,6 @@ import '../../node_modules/toastr/build/toastr.css';
 
 import { default as Web3 } from 'web3';
 import { default as contract } from 'truffle-contract';
-import $ from 'jquery';
 import * as toastr from 'toastr';
 
 import { addlottery } from './component';

@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 export function addlottery(address, due, pool, state = '') {
   $('#list').append(`
   <div class="row">
