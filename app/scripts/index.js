@@ -52,7 +52,7 @@ async function login() {
   return false;
 }
 
-async function logout(message) {
+async function logout() {
   await web3.personal.lockAccount(account, password, 0);
   account = '';
   password = '';
