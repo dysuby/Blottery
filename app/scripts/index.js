@@ -129,3 +129,11 @@ window.addEventListener('load', async function() {
   managerInstance = await Manager.deployed();
   await getList();
 });
+
+window.addEventListener('beforeunload', async function (e) {
+  if (account) {
+    await web3.personal.lockAccount(account, password, 0);
+  }
+  e.preventDefault();
+  e.returnValue = '';
+});
