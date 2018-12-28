@@ -7,8 +7,9 @@ export function addlottery(address, due, pool, state = '') {
     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-vc">${due}</div>
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-vc">${pool}</div>
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-      <buttun class="btn btn-success lottery-action-btn ${state}">Buy</buttun>
-      <buttun class="btn btn-primary lottery-action-btn ${state}">Award</buttun>
+      <buttun class="btn btn-success lottery-action-btn buy-btn ${state}" 
+        data-toggle="modal" data-target="#buy-modal">Buy</buttun>
+      <buttun class="btn btn-primary lottery-action-btn award-btn ${state}">Award</buttun>
     </div>
   </div>`);
 }
