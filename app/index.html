@@ -73,7 +73,7 @@
           <div class="modal-body">
             <div class="form-group"/>
               <label for="initpool" class="control-label">Pool(ether)</label>
-              <input type="number" class="form-control" placeholder="Init Pool" id="initpool"/>
+              <input type="number" class="form-control" placeholder="Init Pool" id="initpool" min="0"/>
             </div>
             <div class="form-group"/>
               <label for="duetime" class="control-label">Duetime</label>
@@ -81,7 +81,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="submit-btn">Submit</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="submit-btn">Sponsor!</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -99,6 +99,31 @@
           Pool(ether)
         </div>
         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 table-head">Action</div>
+      </div>
+
+      <div class="modal fade" id="buy-modal" tabindex="-1" role="dialog" aria-labelledby="buyModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Buy</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group" />
+              <label for="normalnumber" class="control-label">Normal Number(1 ~ 36)</label>
+              <input type="number" class="form-control" placeholder="Normal Number" id="normalnumber" min="1" max="36"/>
+            </div>
+            <div class="form-group" />
+            <label for="specialnumber" class="control-label">Special Number(1 ~ 72)</label>
+            <input type="number" class="form-control" id="specialnumber" min="1" max="72" placeholder="Special Number"/>
+            </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="submit-btn">Buy!</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>
