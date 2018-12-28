@@ -17,9 +17,14 @@ const MaskTwo = contract(MaskTwoArtifact);
 let account = '';
 let password = '';
 let managerInstance;
+const gas = 300000000;
 
 function DateToString(date) {
   return date.toString().split('GMT')[0];
+}
+
+function getTxInfo(args) {
+  return { from: account, gas, ...args };
 }
 
 function setStatus(state) {
@@ -70,15 +75,15 @@ async function sponsor() {
     const timestamp = new Date(due).getTime();
     if (timestamp < Date.now()) throw { message: 'invalid duetime' };
 
-    let instance = await MaskTwo.new(timestamp, {
-      from: account,
-      value: web3.toWei(pool, 'ether'),
-      gas: 300000000
-    });
-    await managerInstance.append(instance.address, { from: account });
-    console.log(instance.address);
+    const instance = await MaskTwo.new(
+      timestamp,
+      getTxInfo({ value: web3.toWei(pool, 'ether') })
+    );
+    await managerInstance.append.sendTransaction(instance.address, getTxInfo());
     addlottery(instance.address, DateToString(new Date(due)), pool, 'logined');
+
     toastr.success(`Sponsor a lottey ${instance.address}`);
+    console.log(instance.address);
   } catch (err) {
     console.log(err.message);
     toastr.error(err.message);
@@ -89,12 +94,17 @@ async function getList() {
   let lotteries = await managerInstance.getAll();
   for (let l of lotteries) {
     const instance = await MaskTwo.at(l);
-    const [rawDue, rawPool] = await Promise.all([instance.endtime(), instance.getPool()]);
+    const [rawDue, rawPool] = await Promise.all([
+      instance.endtime(),
+      instance.getPool()
+    ]);
     const due = DateToString(new Date(rawDue.toNumber()));
     const pool = web3.fromWei(rawPool.toNumber());
     addlottery(instance.address, due, pool, 'disabled');
   }
 }
+
+async function buy() {}
 
 function configToastr() {
   toastr.options.closeButton = true;
