@@ -12,6 +12,9 @@
     "jsx-quotes"           : [2, "prefer-single"],
     "max-len"              : [2, 120, 2],
     "object-curly-spacing" : [2, "always"],
-    "semi":"off"
+    "semi":"off",
+    "space-before-function-paren":"off",
+    "no-unused-vars":"warn",
+    "no-throw-literal":"off"
   }
 }
