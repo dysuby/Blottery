@@ -87,11 +87,11 @@ async function sponsor() {
 
 async function getList() {
   let lotteries = await managerInstance.getAll();
-  console.log(lotteries);
   for (let l of lotteries) {
     const instance = await MaskTwo.at(l);
-    const due = DateToString(new Date((await instance.endtime()).toNumber()));
-    const pool = web3.fromWei((await instance.getPool()).toNumber());
+    const [rawDue, rawPool] = await Promise.all([instance.endtime(), instance.getPool()]);
+    const due = DateToString(new Date(rawDue.toNumber()));
+    const pool = web3.fromWei(rawPool.toNumber());
     addlottery(instance.address, due, pool, 'disabled');
   }
 }
