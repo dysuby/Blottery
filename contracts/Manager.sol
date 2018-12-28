@@ -5,12 +5,15 @@ import './MarkTwo.sol';
 contract Manager {
     address[] public lotteries;
 
-    function deploy(uint e) public {
-        MarkTwo mt = new MarkTwo(e);
-        lotteries.push(mt);
+    function append(address lottery) public {
+        lotteries.push(lottery);
     }
     
-    function get() public view returns(address[]) {
+    function getAll() public view returns(address[]) {
         return lotteries;
+    }
+
+    function getOne(uint idx) public view returns(address) {
+        return lotteries[idx];
     }
 }
