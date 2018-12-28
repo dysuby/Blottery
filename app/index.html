@@ -53,6 +53,7 @@
           <button
             class="btn btn-primary navbar-btn"
             title="sponsor a lottery game"
+            data-toggle="modal" data-target="#sponsor-modal"
           >
             sponsor
           </button>
@@ -62,8 +63,33 @@
       </div>
     </nav>
 
+    <div class="modal fade" id="sponsor-modal" tabindex="-1" role="dialog" aria-labelledby="sponsorModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Sponsor</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group"/>
+              <label for="initpool" class="control-label">Pool(ether)</label>
+              <input type="number" class="form-control" placeholder="Init Pool" id="initpool"/>
+            </div>
+            <div class="form-group"/>
+              <label for="duetime" class="control-label">Duetime</label>
+              <input type="datetime-local" class="form-control" id="duetime"/>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="submit-btn">Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="page-header font-Alice"><h1>Lottery List</h1></div>
-    <div class=".container-fluid font-Caudex">
+    <div id="list" class=".container-fluid font-Caudex">
       <div class="row vertical-align">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 table-head">
           Address
