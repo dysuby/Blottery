@@ -39,14 +39,26 @@ async function setStatus(state) {
       if (!lotteries[index].canBuy) {
         $(this).addClass('disabled');
       } else {
-        $(this).click(setToBuyLottery);
+        $(this).on('click', setClickLottery);
+        $(this).on('click', function () {
+          $('#buy-modal').modal();
+        });
+      }
+    });
+    $('.award-btn').each(function(index) {
+      if (!lotteries[index].canAward) {
+        $(this).addClass('disabled');
+      } else {
+        $(this).click(award);
       }
     });
   } else if (state === 'unlogined') {
     $('#logined').hide();
     $('#unlogined').show();
     $('.lottery-action-btn').addClass('disabled');
-    $('.buy-btn').off('click', setToBuyLottery);
+    $('.buy-btn').off('click', setClickLottery);
+    currentAddress = '';
+    await getList();
   }
 }
 
@@ -59,8 +71,14 @@ async function login() {
     password = pwd;
     for (const l of lotteries) {
       const instance = await MarkTwo.at(l.address);
-      if ((await instance.owner()) === account) {
+      const [owner, bought] = await Promise.all([
+        instance.owner(),
+        instance.bought(account)
+      ]);
+      if (owner === account || bought) {
+        console.log(l.address);
         l.canBuy = false;
+        l.canAward = false;
       }
       console.log(await instance.record(account));
     }
@@ -96,9 +114,13 @@ async function sponsor() {
       getTxInfo({ value: web3.toWei(pool, 'ether') })
     );
     await managerInstance.append.sendTransaction(instance.address, getTxInfo());
-    addlottery(instance.address, DateToString(new Date(due)), pool, 'logined');
-    instance.address.canBuy = true;
-    lotteries.push({ address: instance.address, canBuy: true });
+
+    addlottery(instance.address, DateToString(new Date(due)), pool, 'disabled');
+    lotteries.push({
+      address: instance.address,
+      canBuy: false,
+      canAward: false
+    });
 
     toastr.success(`Sponsor a lottey contract: ${instance.address}`);
     console.log(instance.address);
@@ -110,17 +132,21 @@ async function sponsor() {
 
 async function getList() {
   const addresses = await managerInstance.getAll();
+  $('.lottery').remove();
+  lotteries = [];
   for (const l of addresses) {
     const instance = await MarkTwo.at(l);
     const [rawDue, rawPool] = await Promise.all([
       instance.endtime(),
       instance.getPool()
     ]);
-    if (rawDue.toNumber() < Date.now() && !(await instance.drawd())) {
-      await instance.draw.sendTransaction(getTxInfo());
-      lotteries.push({ address: l, canBuy: false })
+    if (rawDue.toNumber() < Date.now()) {
+      if (!(await instance.drawd())) {
+        await instance.draw.sendTransaction(getTxInfo());
+      }
+      lotteries.push({ address: l, canBuy: false, canAward: true });
     } else {
-      lotteries.push({ address: l, canBuy: true });
+      lotteries.push({ address: l, canBuy: true, canAward: false });
     }
     const due = DateToString(new Date(rawDue.toNumber()));
     const pool = web3.fromWei(rawPool.toNumber());
@@ -128,7 +154,7 @@ async function getList() {
   }
 }
 
-function setToBuyLottery() {
+function setClickLottery() {
   const idx = $('.buy-btn').index(this);
   currentAddress = lotteries[idx].address;
 }
@@ -149,6 +175,9 @@ async function buy() {
     }
     const nn = $('#normalnumber')[0].value;
     const sn = $('#specialnumber')[0].value;
+    if (nn <= 0 || nn > 36 || sn <= 0 || sn > 72) {
+      throw { message: 'Invalid number' };
+    }
     const tx = await instance.buy.sendTransaction(
       nn,
       sn,
@@ -156,6 +185,38 @@ async function buy() {
     );
     console.log(tx);
     toastr.success(`Succeess to buy Tx: ${tx}`);
+  } catch (err) {
+    console.log(err);
+    toastr.error(err.message);
+  }
+}
+
+async function award() {
+  setClickLottery.call(this);
+  try {
+    const instance = await MarkTwo.at(currentAddress);
+    if (!(await instance.drawd)) {
+      throw { message: 'Not Finshed' };
+    } else if (!(await instance.bought(account))) {
+      throw { message: 'You did not buy this lottery' };
+    } else if (await instance.got(account)) {
+      throw { message: 'You has got prize' };
+    }
+    const [tx, record, normal, extra, prize] = await Promise.all([
+      instance.giveOnePrize.sendTransaction(getTxInfo()),
+      instance.record(account),
+      instance.normal(),
+      instance.extra(),
+      instance.prize()
+    ]);
+    let total = 0;
+    if (record[0].toNumber() === normal.toNumber()) {
+      total += prize[0].toNumber();
+    }
+    if (record[1].toNumber() === extra.toNumber()) {
+      total += prize[1].toNumber();
+    }
+    toastr.success(`Congratulations! You has received ${total} ether(s). Tx: ${tx}`);
   } catch (err) {
     console.log(err);
     toastr.error(err.message);
@@ -176,6 +237,8 @@ window.addEventListener('load', async function() {
   }
   Manager.setProvider(web3.currentProvider);
   MarkTwo.setProvider(web3.currentProvider);
+
+  jQuery.noConflict();
 
   configToastr();
   $('#login-btn').click(login);
