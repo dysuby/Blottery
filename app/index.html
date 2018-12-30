@@ -30,6 +30,7 @@
         <div class="navbar-header">
           <a class="navbar-brand nav-title">Blottery</a>
         </div>
+        <!--navbar-header-->
         <div id="unlogined">
           <form class="navbar-form navbar-right" method="POST">
             <div class="form-group">
@@ -45,86 +46,218 @@
                 class="form-control"
                 placeholder="password"
               />
-              <button type="button" class="btn btn-primary" id="login-btn">login</button>
+              <button type="button" class="btn btn-primary" id="login-btn">
+                login
+              </button>
             </div>
           </form>
         </div>
+        <!--unlogined-->
         <div class="navbar-right" id="logined" hidden="true">
           <button
             class="btn btn-primary navbar-btn"
             title="sponsor a lottery game"
-            data-toggle="modal" data-target="#sponsor-modal"
+            data-toggle="modal"
+            data-target="#sponsor-modal"
           >
             sponsor
           </button>
-          <button class="btn navbar-btn" title="logout" id="logout-btn">logout</button>
+          <button class="btn navbar-btn" title="logout" id="logout-btn">
+            logout
+          </button>
         </div>
-        <!--/.nav-collapse -->
+        <!--navbar-right-->
       </div>
+      <!--container-->
     </nav>
 
-    <div class="modal fade" id="sponsor-modal" tabindex="-1" role="dialog" aria-labelledby="sponsorModal">
+    <div
+      class="modal fade"
+      id="sponsor-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="sponsorModal"
+    >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Sponsor</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="sponsor-title">Sponsor</h4>
           </div>
+          <!--modal-header-->
           <div class="modal-body">
-            <div class="form-group"/>
+            <div class="form-group">
               <label for="initpool" class="control-label">Pool(ether)</label>
-              <input type="number" class="form-control" placeholder="Init Pool" id="initpool" min="0"/>
+              <input
+                type="number"
+                class="form-control"
+                placeholder="Init Pool"
+                id="initpool"
+                min="0"
+              />
             </div>
-            <div class="form-group"/>
+            <!--form-group-->
+            <div class="form-group">
               <label for="duetime" class="control-label">Duetime</label>
-              <input type="datetime-local" class="form-control" id="duetime"/>
+              <input type="datetime-local" class="form-control" id="duetime" />
+            </div>
+            <!--form-group-->
+          </div>
+          <!--modal-body-->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              id="submit-sponsor-btn"
+            >
+              Sponsor!
+            </button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Cancel
+            </button>
+          </div>
+          <!--modal-footer-->
+        </div>
+        <!--modal-content-->
+      </div>
+      <!--modal-dialog-->
+    </div>
+    <!--sponsor-modal-->
+
+    <div class="content-father">
+      <div class="content">
+        <div class="page-header font-Alice">
+          <h1>
+            Lottery List
+            <button type="button" class="btn btn-info" id="refresh-btn">
+              <span
+                class="glyphicon glyphicon-refresh"
+                aria-hidden="true"
+              ></span>
+              Refresh
+            </button>
+          </h1>
+        </div>
+        <div id="list" class="container-fluid font-Caudex">
+          <div class="row vertical-align">
+            <div
+              class="col-xs-4 col-sm-4 col-md-4 col-lg-4 table-head text-center"
+            >
+              Address
+            </div>
+            <!--address-->
+            <div
+              class="col-xs-2 col-sm-2 col-md-2 col-lg-2 table-head text-center"
+            >
+              Due
+            </div>
+            <div
+              class="col-xs-2 col-sm-2 col-md-2 col-lg-2 table-head text-center"
+            >
+              Pool(ether)
+            </div>
+            <!--Pool-->
+            <div
+              class="col-xs-1 col-sm-1 col-md-1 col-lg-1 table-head text-center"
+            >
+              Normal/Special Number
+            </div>
+            <!--Normal/Special Number-->
+            <div
+              class="col-xs-3 col-sm-3 col-md-3 col-lg-3 table-head text-center"
+            >
+              Action
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="submit-sponsor-btn">Sponsor!</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          </div>
+          <!--row-->
         </div>
+        <!--content-->
       </div>
-    </div>
-
-    <div class="page-header font-Alice"><h1>Lottery List</h1></div>
-    <div id="list" class=".container-fluid font-Caudex">
-      <div class="row vertical-align">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 table-head text-center">
-          Address
-        </div>
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 table-head text-center">Due</div>
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 table-head text-center">
-          Pool(ether)
-        </div>
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 table-head text-center">Action</div>
-      </div>
-
-      <div class="modal fade" id="buy-modal" tabindex="-1" role="dialog" aria-labelledby="buyModal">
+      <!--list-->
+      <div
+        class="modal fade"
+        id="buy-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="buyModal"
+      >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">Buy</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" id="buy-title">Buy</h4>
             </div>
+            <!--modal-header-->
             <div class="modal-body">
-              <div class="form-group" />
-              <label for="normalnumber" class="control-label">Normal Number(1 ~ 36)</label>
-              <input type="number" class="form-control" placeholder="Normal Number" id="normalnumber" min="1" max="36"/>
+              <div class="form-group">
+                <label for="normalnumber" class="control-label"
+                  >Normal Number(1 ~ 36)</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="Normal Number"
+                  id="normalnumber"
+                  min="1"
+                  max="36"
+                />
+              </div>
+              <!--form-group-->
+              <div class="form-group">
+                <label for="specialnumber" class="control-label"
+                  >Special Number(1 ~ 72)</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="specialnumber"
+                  min="1"
+                  max="72"
+                  placeholder="Special Number"
+                />
+              </div>
+              <!--form-group-->
             </div>
-            <div class="form-group" />
-            <label for="specialnumber" class="control-label">Special Number(1 ~ 72)</label>
-            <input type="number" class="form-control" id="specialnumber" min="1" max="72" placeholder="Special Number"/>
-            </div>
-            </div>
+            <!--modal-body-->
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal" id="buy-submit-btn">Buy!</button>
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-dismiss="modal"
+                id="buy-submit-btn"
+              >
+                Buy!
+              </button>
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
             </div>
+            <!--modal-footer-->
           </div>
+          <!--modal-content-->
         </div>
+        <!--modal-dialog-->
       </div>
+      <!--buyModal-->
     </div>
   </body>
 </html>
