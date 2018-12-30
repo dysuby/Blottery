@@ -65,7 +65,7 @@ contract MarkTwo {
         address buyer = msg.sender;
         // 未结束
         require(now < endtime, 'FINISHED');
-        // 支付 1 wei
+        // 支付 1 ether
         require(msg.value == 1 ether, 'NMONEY');
         // 合法的彩票数字
         require(n <= 36 && n > 0 && e > 0 && e <= 72, 'ENUMBER');
