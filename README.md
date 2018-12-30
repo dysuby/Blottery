@@ -30,3 +30,7 @@ open [127.0.0.1:8080](http://127.0.0.1:8080)
 - When you **buy** or **sponsor** or **award** a lottery, don't forget to **mine** in geth.
 - Please don't refresh or close tab directly when you're logining in, **logout first**.
 - Be patient and tolerant, thx 😁.
+
+## Screenshot
+
+![example](screenshot/example.png)
