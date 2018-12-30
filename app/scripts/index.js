@@ -39,44 +39,51 @@ function getTxInfo(args) {
 }
 
 /**
- * 转换登录和未登录的状态
- * @param {'logined'|'unlogined'} state
+ * 更新按钮
  */
-async function setStatus(state) {
-  if (state === 'logined') {
-    await getList();
-
-    $('#unlogined').hide();
-    $('#logined').show();
-    $('input[name="address"]').val('');
-    $('input[name="password"]').val('');
-
+function update() {
+  if (account) {
     // 更新可用行动
     $('.lottery-action-btn').removeClass('disabled');
-    $('.buy-btn').each(function(index) {
+    $('.buy-btn').each(function (index) {
       if (!lotteries[index].canBuy) {
         $(this).addClass('disabled');
       } else {
         $(this).on('click', setClickLottery);
-        $(this).on('click', function() {
+        $(this).on('click', function () {
           $('#buy-modal').modal();
         });
       }
     });
-    $('.award-btn').each(function(index) {
+    $('.award-btn').each(function (index) {
       if (!lotteries[index].canAward) {
         $(this).addClass('disabled');
       } else {
         $(this).click(award);
       }
     });
-  } else if (state === 'unlogined') {
-    $('#logined').hide();
-    $('#unlogined').show();
+  } else {
     $('.lottery-action-btn').addClass('disabled');
     $('.buy-btn').off('click', setClickLottery);
-    currentAddress = '';
+  }
+}
+
+/**
+ * 转换登录和未登录的状态
+ * @param {'logined'|'unlogined'} state
+ */
+async function setStatus(state) {
+  if (state === 'logined') {
     await getList();
+    $('#unlogined').hide();
+    $('#logined').show();
+    $('input[name="address"]').val('');
+    $('input[name="password"]').val('');
+  } else if (state === 'unlogined') {
+    await getList();
+    $('#logined').hide();
+    $('#unlogined').show();
+    currentAddress = '';
   }
 }
 
@@ -119,7 +126,7 @@ async function sponsor() {
   try {
     const pool = $('#initpool')[0].value;
     const due = $('#duetime')[0].value;
-    // 判断合法想
+    // 判断合法性
     if (!pool || pool < 0) throw { message: 'Input a positive number' };
     if (!due) throw { message: 'Input the duetime' };
 
@@ -196,25 +203,28 @@ async function getList() {
       lotteries.push({ address: l, canBuy: true, canAward: false });
     }
 
-    // 决定该账号的可用行动
-    const [owner, bought] = await Promise.all([
-      instance.owner(),
-      instance.bought(account)
-    ]);
-    if (owner === account || bought) {
-      // 发起者或已经买过，不能买
-      lotteries[lotteries.length - 1].canBuy = false;
-    }
-    if ((await instance.got(account)) || !bought || owner === account) {
-      // 领奖了，没买过，发起者不能领奖
-      lotteries[lotteries.length - 1].canAward = false;
+    if (account) {
+      // 决定该账号的可用行动
+      const [owner, bought] = await Promise.all([
+        instance.owner(),
+        instance.bought(account)
+      ]);
+      if (owner === account || bought) {
+        // 发起者或已经买过，不能买
+        lotteries[lotteries.length - 1].canBuy = false;
+      }
+      if ((await instance.got(account)) || !bought || owner === account) {
+        // 领奖了，没买过，发起者不能领奖
+        lotteries[lotteries.length - 1].canAward = false;
+      }
     }
 
-    // 先设为不可用，让 setStatus 更新
+    // 先设为不可用，让 update 更新
     addlottery(instance.address, due, pool, 'disabled', nn, sn);
   }
   // 解锁刷新按钮
   $('#refresh-btn').removeClass('disabled');
+  update();
 }
 
 /**
@@ -276,7 +286,8 @@ Tx: ${tx}`);
  */
 async function award() {
   // 获得领奖的彩票
-  const idx = $('.award-btn').index(this);
+  const self = this;
+  const idx = $('.award-btn').index(self);
   currentAddress = lotteries[idx].address;
   try {
     const instance = await MarkTwo.at(currentAddress);
@@ -322,9 +333,7 @@ async function award() {
       `Congratulations! You has received ${total} ether(s).
 Tx: ${tx}`
     );
-    $(`.prized-numbers:eq(${$('.buy-btn').index(this)})`).text(
-      `${normal}/${extra}`
-    );
+    $(`.prized-numbers:eq(${$('.buy-btn').index(self)})`).text(`${normal}/${extra}`);
   } catch (err) {
     console.log(err);
     toastr.error(err.message);

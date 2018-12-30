@@ -1,5 +1,7 @@
 pragma solidity ^0.4.24;
 
+import './MarkTwo.sol';
+
 contract Manager {
     address[] public lotteries;
 
@@ -9,9 +11,5 @@ contract Manager {
     
     function getAll() public view returns(address[]) {
         return lotteries;
-    }
-
-    function getOne(uint idx) public view returns(address) {
-        return lotteries[idx];
     }
 }
