@@ -13,3 +13,17 @@ require node, geth, truffle
 `truffle networks --clean`
 
 `truffle migrate --reset`
+
+`npm run dev`
+
+may need turn off chrome cors security, such as:
+
+`.\chrome.lnk --disable-web-security --user-data-dir=D:/blockchain`
+
+open [127.0.0.1:8080](http://127.0.0.1:8080)
+
+## Usage
+
+- When you buy or sponsor or award a lottery, don't forget to mine in geth.
+- Please don't refresh or close tab directly when you're logining, logout first.
+- Be patient and tolerant.
