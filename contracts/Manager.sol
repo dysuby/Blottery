@@ -1,7 +1,5 @@
 pragma solidity ^0.4.24;
 
-import './MarkTwo.sol';
-
 contract Manager {
     address[] public lotteries;
 
