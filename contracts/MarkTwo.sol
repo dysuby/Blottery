@@ -64,7 +64,7 @@ contract MarkTwo {
     function buy(uint8 n, uint8 e) public payable onlyBuyer {
         address buyer = msg.sender;
         // 未结束
-        require(now < endtime, 'FINISHED');
+        require(!drawed, 'FINISHED');
         // 支付 1 ether
         require(msg.value == 1 ether, 'NMONEY');
         // 合法的彩票数字
@@ -87,8 +87,6 @@ contract MarkTwo {
     * 开奖
     */
     function draw() public {
-        // 已经结束
-        require(now > endtime, 'NFINISHED');
         // 未开奖
         require(!drawed, 'FINISHED');
 
