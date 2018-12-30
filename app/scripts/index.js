@@ -333,7 +333,7 @@ async function award() {
       `Congratulations! You has received ${total} ether(s).
 Tx: ${tx}`
     );
-    $(`.prized-numbers:eq(${$('.buy-btn').index(self)})`).text(`${normal}/${extra}`);
+    $(`.prized-numbers:eq(${$('.award-btn').index(self)})`).text(`${normal}/${extra}`);
   } catch (err) {
     console.log(err);
     toastr.error(err.message);
