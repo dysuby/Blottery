@@ -93,8 +93,8 @@ contract MarkTwo {
         require(!drawed, 'FINISHED');
 
         // 生成结果
-        uint n_ran = uint(this) ^ now;
-        uint e_ran = uint(owner) ^ now;
+        uint n_ran = uint(this) ^ now ^ 2699;
+        uint e_ran = uint(owner) ^ n_ran ^ 3571;
         for (uint i = 0; i < participants.length; ++i) {
             n_ran ^= uint(participants[i]);
             e_ran ^= uint(participants[i]);
